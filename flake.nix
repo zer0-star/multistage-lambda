@@ -39,14 +39,19 @@
           # };
 
           devShell = {
-           # Enabled by default
-           # enable = true;
+            # Enabled by default
+            # enable = true;
 
-           # Programs you want to make available in the shell.
-           # Default programs can be disabled by setting to 'null'
-           # tools = hp: { fourmolu = hp.fourmolu; ghcid = null; };
+            # Programs you want to make available in the shell.
+            # Default programs can be disabled by setting to 'null'
+            # tools = hp: { fourmolu = hp.fourmolu; ghcid = null; };
 
-           hlsCheck.enable = true;
+            tools = hp: {
+              inherit (hp)
+                cabal-fmt;
+            };
+
+            hlsCheck.enable = true;
           };
         };
 
