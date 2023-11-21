@@ -52,15 +52,25 @@ extra-doc-files: CHANGELOG.md
 -- Extra source files to be distributed with the package, such as examples, or a tutorial module.
 -- extra-source-files:
 
+common language
+  default-extensions: OverloadedStrings
+  default-language:   GHC2021
+
 common warnings
   ghc-options: -Wall
 
 library
-  -- Import common warning flags.
-  import:           warnings
+  import:          warnings, language
 
   -- Modules exported by the library.
-  exposed-modules:  MyLib
+  exposed-modules:
+    MultLam.Data.Common
+    MultLam.Data.Expr
+    MultLam.Data.Type
+    MultLam.Parser.Common
+    MultLam.Parser.Expr
+    MultLam.Primitive
+    MultLam.Renamer
 
   -- Modules included in this library but not exported.
   -- other-modules:
@@ -69,20 +79,20 @@ library
   -- other-extensions:
 
   -- Other library packages from which modules are imported.
-  build-depends:    base ^>=4.17.2.0
+  build-depends:
+    , base        ^>=4.17.2.0
+    , containers
+    , megaparsec
+    , text
 
   -- Directories containing source files.
-  hs-source-dirs:   src
-
-  -- Base language which the package is written in.
-  default-language: GHC2021
+  hs-source-dirs:  src
 
 executable multistage-lambda
-  -- Import common warning flags.
-  import:           warnings
+  import:         warnings, language
 
   -- .hs or .lhs file containing the Main module.
-  main-is:          Main.hs
+  main-is:        Main.hs
 
   -- Modules included in this executable, other than Main.
   -- other-modules:
@@ -93,20 +103,15 @@ executable multistage-lambda
   -- Other library packages from which modules are imported.
   build-depends:
     , base               ^>=4.17.2.0
+    , megaparsec
     , multistage-lambda
+    , text
 
   -- Directories containing source files.
-  hs-source-dirs:   app
-
-  -- Base language which the package is written in.
-  default-language: GHC2021
+  hs-source-dirs: app
 
 test-suite multistage-lambda-test
-  -- Import common warning flags.
-  import:           warnings
-
-  -- Base language which the package is written in.
-  default-language: GHC2021
+  import:         warnings, language
 
   -- Modules included in this executable, other than Main.
   -- other-modules:
@@ -115,13 +120,13 @@ test-suite multistage-lambda-test
   -- other-extensions:
 
   -- The interface type and version of the test suite.
-  type:             exitcode-stdio-1.0
+  type:           exitcode-stdio-1.0
 
   -- Directories containing source files.
-  hs-source-dirs:   test
+  hs-source-dirs: test
 
   -- The entrypoint to the test suite.
-  main-is:          Main.hs
+  main-is:        Main.hs
 
   -- Test dependencies.
   build-depends:
