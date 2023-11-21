@@ -1,23 +1,25 @@
 module MultLam.Data.Expr where
 
-import qualified Data.Text as T
+import Data.Text qualified as T
 
-import           MultLam.Data.Common
+import MultLam.Data.Common
 
-data RawExpr = RVar Name
-             | RLam Name RawExpr
-             | RApp RawExpr RawExpr
-             | RLet Name RawExpr RawExpr
-             | RPar RawExpr
-             | RIntLit Int
+data RawExpr
+  = RVar Name
+  | RLam Name RawExpr
+  | RApp RawExpr RawExpr
+  | RLet Name RawExpr RawExpr
+  | RPar RawExpr
+  | RIntLit Int
 
-data Expr = Var Name Int
-          | FVar Name Int
-          | Prim Name
-          | Lam Name Expr
-          | App Expr Expr
-          | Let Name Expr Expr
-          | IntLit Int
+data Expr
+  = Var Name Int
+  | FVar Name Int
+  | Prim Name
+  | Lam Name Expr
+  | App Expr Expr
+  | Let Name Expr Expr
+  | IntLit Int
 
 instance Show RawExpr where
   show (RVar x) = T.unpack x

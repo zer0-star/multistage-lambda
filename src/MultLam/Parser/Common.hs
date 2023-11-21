@@ -1,14 +1,14 @@
 module MultLam.Parser.Common where
 
-import           Data.Text (Text)
-import qualified Data.Text as T
-import           Data.Void (Void)
+import Data.Text (Text)
+import Data.Text qualified as T
+import Data.Void (Void)
 
-import qualified Text.Megaparsec as M
-import           Text.Megaparsec ((<|>))
-import qualified Text.Megaparsec.Char as M
-import qualified Text.Megaparsec.Char.Lexer as L
-import           Text.Read.Lex (isSymbolChar)
+import Text.Megaparsec ((<|>))
+import Text.Megaparsec qualified as M
+import Text.Megaparsec.Char qualified as M
+import Text.Megaparsec.Char.Lexer qualified as L
+import Text.Read.Lex (isSymbolChar)
 
 type Parser = M.Parsec Void Text
 
@@ -32,11 +32,10 @@ identifier :: Parser Text
 identifier = lexeme $ do
   c <- M.letterChar
   cs <- M.many (M.alphaNumChar <|> M.oneOf ['_', '\'', '-'])
-  return $ T.pack (c:cs)
+  return $ T.pack (c : cs)
 
 identifier' :: Text -> Parser Text
-identifier' s = lexeme
-  $ M.string s <* M.notFollowedBy (M.alphaNumChar <|> M.oneOf ['_', '\'', '-'])
+identifier' s = lexeme $ M.string s <* M.notFollowedBy (M.alphaNumChar <|> M.oneOf ['_', '\'', '-'])
 
 parens :: Parser a -> Parser a
 parens = M.between (lexeme "(") (lexeme ")")

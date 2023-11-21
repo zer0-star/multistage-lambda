@@ -1,16 +1,16 @@
 module MultLam.Parser.Expr where
 
-import           Data.Text (Text)
-import qualified Data.Text as T
+import Data.Text (Text)
+import Data.Text qualified as T
 
-import qualified Text.Megaparsec as M
-import           Text.Megaparsec ((<|>))
-import qualified Text.Megaparsec.Char as M
-import qualified Text.Megaparsec.Char.Lexer as L
+import Text.Megaparsec ((<|>))
+import Text.Megaparsec qualified as M
+import Text.Megaparsec.Char qualified as M
+import Text.Megaparsec.Char.Lexer qualified as L
 
-import           MultLam.Data.Common
-import           MultLam.Data.Expr
-import           MultLam.Parser.Common
+import MultLam.Data.Common
+import MultLam.Data.Expr
+import MultLam.Parser.Common
 
 reservedWords :: [Text]
 reservedWords = ["let", "in"]
