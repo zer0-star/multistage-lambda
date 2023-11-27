@@ -10,23 +10,34 @@ import System.IO
 
 import Text.Megaparsec qualified as M
 
+import Data.List.NonEmpty qualified as NE
 import MultLam.Data.Expr
 import MultLam.Parser.Expr
 import MultLam.Renamer
+import MultLam.TypeCheck
+import System.Console.Readline (addHistory, readline)
 
 main :: IO ()
 main = do
   putStrLn "oisu-"
   forever $ do
-    putStr "> "
-    hFlush stdout
-    eof <- isEOF
-    when eof $ putStrLn "bye" >> exitSuccess
-    s <- T.getLine
-    case M.parse expr "" s of
-      Left e -> putStrLn $ M.errorBundlePretty e
-      Right e -> case rename e of
-        Left e' -> T.putStrLn $ "syntax error: " <> e'
-        Right e' -> do
-          print e
-          print e'
+    input <- readline "> "
+    case input of
+      Nothing -> putStrLn "bye" >> exitSuccess
+      Just ":q" -> putStrLn "bye" >> exitSuccess
+      Just s' -> do
+        addHistory s'
+        let s = T.pack s'
+        case M.parse (expr <* M.eof) "" s of
+          Left e -> do
+            putStrLn $ "parse error: " <> M.errorBundlePretty e
+          Right e -> do
+            print e
+            case rename e of
+              Left e' -> putStrLn $ "syntax error: " <> M.errorBundlePretty (M.ParseErrorBundle (NE.singleton e') $ M.PosState s 0 (M.initialPos "") M.defaultTabWidth "")
+              Right e' -> do
+                -- print e'
+                case infer e' of
+                  Left e'' -> putStrLn $ "type error: " <> e''
+                  Right (e'', t) -> do
+                    putStrLn $ show e'' <> " : " <> show t

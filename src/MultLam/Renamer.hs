@@ -1,24 +1,27 @@
 module MultLam.Renamer (rename) where
 
 import Control.Applicative
-
 import Data.List
-import Data.Text
-
+import Data.Text (Text)
+import Data.Void
 import MultLam.Data.Common
 import MultLam.Data.Expr
 import MultLam.Primitive
+import Text.Megaparsec (ParseError)
+import Text.Megaparsec.Error qualified as E
+import Text.Megaparsec.Error.Builder qualified as E
 
-rename :: RawExpr -> Either Text Expr
+rename :: Expr 'Parsed -> Either (ParseError Text Void) (Expr 'Renamed)
 rename = rename' []
 
-rename' :: [Name] -> RawExpr -> Either Text Expr
-rename' env (RVar x)
-  | Just i <- x `elemIndex` env = Right $ Var x i
-  | Just _ <- x `lookup` primitives = Right $ Prim x
-  | otherwise = Left $ "undefined variable " <> x
-rename' env (RLam x e) = Lam x <$> rename' (x : env) e
-rename' env (RApp e1 e2) = liftA2 App (rename' env e1) (rename' env e2)
-rename' env (RLet x e1 e2) = liftA2 (Let x) (rename' env e1) (rename' (x : env) e2)
-rename' env (RPar e) = rename' env e
-rename' env (RIntLit i) = Right $ IntLit i
+rename' :: [Name] -> Expr 'Parsed -> Either (ParseError Text Void) (Expr 'Renamed)
+rename' env (EVar o x)
+  | Just i <- x `elemIndex` env = Right $ EVar o (i, x)
+  | Just _ <- x `lookup` primitives = Right $ EPrim o x
+  | otherwise = Left $ E.errFancy o $ E.fancy $ E.ErrorFail ("undefined variable " <> show x)
+rename' env (EPrim {}) = error "rename': RPrim"
+rename' env (ELam o x e) = ELam o x <$> rename' (x : env) e
+rename' env (EApp o e1 e2) = liftA2 (EApp o) (rename' env e1) (rename' env e2)
+rename' env (ELet o x e1 e2) = liftA2 (ELet o x) (rename' env e1) (rename' (x : env) e2)
+rename' env (EPar o e) = EPar o <$> rename' env e
+rename' env (EIntLit o i) = Right $ EIntLit o i

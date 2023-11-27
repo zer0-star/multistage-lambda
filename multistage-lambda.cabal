@@ -53,7 +53,14 @@ extra-doc-files: CHANGELOG.md
 -- extra-source-files:
 
 common language
-  default-extensions: OverloadedStrings
+  default-extensions:
+    BlockArguments
+    DataKinds
+    NoFieldSelectors
+    OverloadedRecordDot
+    OverloadedStrings
+    TypeFamilies
+
   default-language:   GHC2021
 
 common warnings
@@ -66,11 +73,13 @@ library
   exposed-modules:
     MultLam.Data.Common
     MultLam.Data.Expr
+    MultLam.Data.IR
     MultLam.Data.Type
     MultLam.Parser.Common
     MultLam.Parser.Expr
     MultLam.Primitive
     MultLam.Renamer
+    MultLam.TypeCheck
 
   -- Modules included in this library but not exported.
   -- other-modules:
@@ -83,6 +92,7 @@ library
     , base        ^>=4.17.2.0
     , containers
     , megaparsec
+    , mtl
     , text
 
   -- Directories containing source files.
@@ -105,6 +115,7 @@ executable multistage-lambda
     , base               ^>=4.17.2.0
     , megaparsec
     , multistage-lambda
+    , readline
     , text
 
   -- Directories containing source files.

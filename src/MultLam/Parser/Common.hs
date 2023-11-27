@@ -4,6 +4,7 @@ import Data.Text (Text)
 import Data.Text qualified as T
 import Data.Void (Void)
 
+import MultLam.Data.Common
 import Text.Megaparsec ((<|>))
 import Text.Megaparsec qualified as M
 import Text.Megaparsec.Char qualified as M
@@ -36,6 +37,12 @@ identifier = lexeme $ do
 
 identifier' :: Text -> Parser Text
 identifier' s = lexeme $ M.string s <* M.notFollowedBy (M.alphaNumChar <|> M.oneOf ['_', '\'', '-'])
+
+lname :: Parser LName
+lname = do
+  o <- M.getOffset
+  x <- identifier
+  return $ LName x o
 
 parens :: Parser a -> Parser a
 parens = M.between (lexeme "(") (lexeme ")")

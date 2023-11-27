@@ -1,10 +1,10 @@
 module MultLam.Primitive where
 
 import MultLam.Data.Common
-import MultLam.Data.Expr
+import MultLam.Data.IR
 import MultLam.Data.Type
 
-type Primive = (Type, [Expr] -> Expr)
+type Primive = (Type, [IR] -> IR)
 
 primitives :: [(Name, Primive)]
 primitives =
@@ -14,18 +14,18 @@ primitives =
   , ("div", (TArr TInt (TArr TInt TInt), primDiv))
   ]
 
-primAdd :: [Expr] -> Expr
+primAdd :: [IR] -> IR
 primAdd [IntLit x, IntLit y] = IntLit (x + y)
 primAdd _ = error "primAdd: invalid arguments"
 
-primSub :: [Expr] -> Expr
+primSub :: [IR] -> IR
 primSub [IntLit x, IntLit y] = IntLit (x - y)
 primSub _ = error "primSub: invalid arguments"
 
-primMul :: [Expr] -> Expr
+primMul :: [IR] -> IR
 primMul [IntLit x, IntLit y] = IntLit (x * y)
 primMul _ = error "primMul: invalid arguments"
 
-primDiv :: [Expr] -> Expr
+primDiv :: [IR] -> IR
 primDiv [IntLit x, IntLit y] = IntLit (x `div` y)
 primDiv _ = error "primDiv: invalid arguments"
