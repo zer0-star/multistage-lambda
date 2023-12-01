@@ -73,11 +73,14 @@ library
   exposed-modules:
     MultLam.Data.Common
     MultLam.Data.Expr
+    MultLam.Data.Expr.Lower
     MultLam.Data.IR
     MultLam.Data.Type
+    MultLam.Evaluate
     MultLam.Parser.Common
     MultLam.Parser.Expr
     MultLam.Primitive
+    MultLam.Primitive.Types
     MultLam.Renamer
     MultLam.TypeCheck
 

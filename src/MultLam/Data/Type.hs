@@ -19,4 +19,5 @@ instance Show Type where
   show (TBVar i) = "#" <> show i
 
 instance Show Scheme where
+  show (Forall 0 t) = show t
   show (Forall n t) = "forall (" <> show n <> "). " <> show t

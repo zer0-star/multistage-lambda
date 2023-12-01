@@ -14,7 +14,7 @@ import Text.Megaparsec.Error.Builder qualified as E
 import MultLam.Data.Common
 import MultLam.Data.Expr
 import MultLam.Data.Type
-import MultLam.Primitive
+import MultLam.Primitive.Types
 
 type Substitution = IntMap Type
 
@@ -108,7 +108,7 @@ check (EVar o (i, x)) t = do
   s <- unify t t'
   return (s, EVar o (i, x))
 check (EPrim o x) t = do
-  let Just (t', _) = x `lookup` primitives
+  let Just t' = x `lookup` primTypes
   s <- unify t t'
   return (s, EPrim o x)
 check (ELam o x e) t = do

@@ -6,7 +6,7 @@ import Data.Text (Text)
 import Data.Void
 import MultLam.Data.Common
 import MultLam.Data.Expr
-import MultLam.Primitive
+import MultLam.Primitive.Types
 import Text.Megaparsec (ParseError)
 import Text.Megaparsec.Error qualified as E
 import Text.Megaparsec.Error.Builder qualified as E
@@ -17,7 +17,7 @@ rename = rename' []
 rename' :: [Name] -> Expr 'Parsed -> Either (ParseError Text Void) (Expr 'Renamed)
 rename' env (EVar o x)
   | Just i <- x `elemIndex` env = Right $ EVar o (i, x)
-  | Just _ <- x `lookup` primitives = Right $ EPrim o x
+  | Just _ <- x `lookup` primTypes = Right $ EPrim o x
   | otherwise = Left $ E.errFancy o $ E.fancy $ E.ErrorFail ("undefined variable " <> show x)
 rename' env (EPrim {}) = error "rename': RPrim"
 rename' env (ELam o x e) = ELam o x <$> rename' (x : env) e

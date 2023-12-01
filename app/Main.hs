@@ -3,15 +3,15 @@ module Main where
 import Control.Monad
 
 import Data.Text qualified as T
-import Data.Text.IO qualified as T
 
 import System.Exit
-import System.IO
 
 import Text.Megaparsec qualified as M
 
 import Data.List.NonEmpty qualified as NE
 import MultLam.Data.Expr
+import MultLam.Data.Expr.Lower
+import MultLam.Evaluate
 import MultLam.Parser.Expr
 import MultLam.Renamer
 import MultLam.TypeCheck
@@ -20,7 +20,7 @@ import System.Console.Readline (addHistory, readline)
 main :: IO ()
 main = do
   putStrLn "oisu-"
-  forever $ do
+  forever do
     input <- readline "> "
     case input of
       Nothing -> putStrLn "bye" >> exitSuccess
@@ -41,3 +41,6 @@ main = do
                   Left e'' -> putStrLn $ "type error: " <> e''
                   Right (e'', t) -> do
                     putStrLn $ show e'' <> " : " <> show t
+                    case eval $ lower e'' of
+                      Left e''' -> putStrLn $ "evaluation error: " <> e'''
+                      Right v -> print v

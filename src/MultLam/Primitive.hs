@@ -1,18 +1,25 @@
-module MultLam.Primitive where
+module MultLam.Primitive (
+  module MultLam.Primitive,
+  module MultLam.Primitive.Types,
+) where
 
 import MultLam.Data.Common
 import MultLam.Data.IR
-import MultLam.Data.Type
+import MultLam.Primitive.Types
 
-type Primive = (Type, [IR] -> IR)
+prim :: Name -> [IR] -> IR
+prim "add" = primAdd
+prim "sub" = primSub
+prim "mul" = primMul
+prim "div" = primDiv
+prim _ = error "prim: unknown primitive"
 
-primitives :: [(Name, Primive)]
-primitives =
-  [ ("add", (TArr TInt (TArr TInt TInt), primAdd))
-  , ("sub", (TArr TInt (TArr TInt TInt), primSub))
-  , ("mul", (TArr TInt (TArr TInt TInt), primMul))
-  , ("div", (TArr TInt (TArr TInt TInt), primDiv))
-  ]
+primArgLen :: Name -> Int
+primArgLen "add" = 2
+primArgLen "sub" = 2
+primArgLen "mul" = 2
+primArgLen "div" = 2
+primArgLen _ = error "primArgLen: unknown primitive"
 
 primAdd :: [IR] -> IR
 primAdd [IntLit x, IntLit y] = IntLit (x + y)
