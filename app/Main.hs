@@ -9,7 +9,6 @@ import System.Exit
 import Text.Megaparsec qualified as M
 
 import Data.List.NonEmpty qualified as NE
-import MultLam.Data.Expr
 import MultLam.Data.Expr.Lower
 import MultLam.Evaluate
 import MultLam.Parser.Expr

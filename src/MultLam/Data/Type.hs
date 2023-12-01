@@ -1,7 +1,5 @@
 module MultLam.Data.Type where
 
-import MultLam.Data.Common
-
 data Type
   = TInt
   | TArr Type Type

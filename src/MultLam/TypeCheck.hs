@@ -6,12 +6,6 @@ import Data.IntMap.Strict (IntMap)
 import Data.IntMap.Strict qualified as IntMap
 import Data.IntSet (IntSet)
 import Data.IntSet qualified as IntSet
-import Data.Text (Text)
-import Data.Void (Void)
-import Text.Megaparsec.Error qualified as E
-import Text.Megaparsec.Error.Builder qualified as E
-
-import MultLam.Data.Common
 import MultLam.Data.Expr
 import MultLam.Data.Type
 import MultLam.Primitive.Types
@@ -40,7 +34,7 @@ apply s (TArr t1 t2) = TArr (apply s t1) (apply s t2)
 apply s (TVar i) = case IntMap.lookup i s of
   Just t -> t
   Nothing -> TVar i
-apply s t = t
+apply _ t = t
 
 applyBound :: [Type] -> Type -> Type
 applyBound env (TBVar i) = env !! i
@@ -54,13 +48,13 @@ applyEnv :: Substitution -> Env -> Env
 applyEnv s = map (applyS s)
 
 applyExpr :: Substitution -> Expr 'Typed -> Expr 'Typed
-applyExpr s (EVar o (i, x)) = EVar o (i, x)
-applyExpr s (EPrim o x) = EPrim o x
+applyExpr _ (EVar o (i, x)) = EVar o (i, x)
+applyExpr _ (EPrim o x) = EPrim o x
 applyExpr s (ELam o (x, t) e) = ELam o (x, apply s t) (applyExpr s e)
 applyExpr s (EApp o e1 e2) = EApp o (applyExpr s e1) (applyExpr s e2)
 applyExpr s (ELet o (x, t) e1 e2) = ELet o (x, applyS s t) (applyExpr s e1) (applyExpr s e2)
 applyExpr s (EPar o e) = EPar o (applyExpr s e)
-applyExpr s (EIntLit o n) = EIntLit o n
+applyExpr _ (EIntLit o n) = EIntLit o n
 
 infixr 6 `compose`
 compose :: Substitution -> Substitution -> Substitution

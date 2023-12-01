@@ -19,9 +19,9 @@ rename' env (EVar o x)
   | Just i <- x `elemIndex` env = Right $ EVar o (i, x)
   | Just _ <- x `lookup` primTypes = Right $ EPrim o x
   | otherwise = Left $ E.errFancy o $ E.fancy $ E.ErrorFail ("undefined variable " <> show x)
-rename' env (EPrim {}) = error "rename': RPrim"
+rename' _ (EPrim {}) = error "rename': RPrim"
 rename' env (ELam o x e) = ELam o x <$> rename' (x : env) e
 rename' env (EApp o e1 e2) = liftA2 (EApp o) (rename' env e1) (rename' env e2)
 rename' env (ELet o x e1 e2) = liftA2 (ELet o x) (rename' env e1) (rename' (x : env) e2)
 rename' env (EPar o e) = EPar o <$> rename' env e
-rename' env (EIntLit o i) = Right $ EIntLit o i
+rename' _ (EIntLit o i) = Right $ EIntLit o i

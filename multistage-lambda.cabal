@@ -64,7 +64,7 @@ common language
   default-language:   GHC2021
 
 common warnings
-  ghc-options: -Wall
+  ghc-options: -Wall -Wno-unused-do-bind
 
 library
   import:          warnings, language

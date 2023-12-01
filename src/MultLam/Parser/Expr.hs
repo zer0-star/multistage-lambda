@@ -1,10 +1,8 @@
 module MultLam.Parser.Expr where
 
 import Data.Text (Text)
-import Data.Text qualified as T
 
 import Text.Megaparsec qualified as M
-import Text.Megaparsec.Char qualified as M
 import Text.Megaparsec.Char.Lexer qualified as L
 
 import Control.Applicative

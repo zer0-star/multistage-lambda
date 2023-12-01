@@ -1,11 +1,8 @@
 module MultLam.Evaluate (eval) where
 
 import Control.Monad.Except
-import Control.Monad.RWS.Strict
 import MultLam.Data.IR
 import MultLam.Primitive (prim)
-
-type Env = [IR]
 
 -- type EvalM a = RWST Env () Int (Either String) a
 type EvalM = Except String
