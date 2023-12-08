@@ -103,7 +103,7 @@ check (EVar o (i, x)) t = do
   return (s, EVar o (i, x))
 check (EPrim o x) t = do
   let Just t' = x `lookup` primTypes
-  s <- unify t t'
+  s <- unify t =<< instanciate t'
   return (s, EPrim o x)
 check (ELam o x e) t = do
   t1 <- newTVar

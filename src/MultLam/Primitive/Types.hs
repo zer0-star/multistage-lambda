@@ -3,10 +3,10 @@ module MultLam.Primitive.Types where
 import MultLam.Data.Common
 import MultLam.Data.Type
 
-primTypes :: [(Name, Type)]
+primTypes :: [(Name, Scheme)]
 primTypes =
-  [ ("add", TArr TInt (TArr TInt TInt))
-  , ("sub", TArr TInt (TArr TInt TInt))
-  , ("mul", TArr TInt (TArr TInt TInt))
-  , ("div", TArr TInt (TArr TInt TInt))
+  [ ("add", toS $ TInt --> TInt --> TInt)
+  , ("sub", toS $ TInt --> TInt --> TInt)
+  , ("mul", toS $ TInt --> TInt --> TInt)
+  , ("div", toS $ TInt --> TInt --> TInt)
   ]

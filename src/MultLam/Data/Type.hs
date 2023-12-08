@@ -7,8 +7,15 @@ data Type
   | TBVar Int
   deriving (Eq)
 
+infixr 3 -->
+(-->) :: Type -> Type -> Type
+(-->) = TArr
+
 data Scheme = Forall Int Type
   deriving (Eq)
+
+toS :: Type -> Scheme
+toS = Forall 0
 
 instance Show Type where
   show TInt = "Int"
