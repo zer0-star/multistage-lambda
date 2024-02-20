@@ -29,6 +29,10 @@ fvar _ = mempty
 fvarS :: Scheme -> IntSet
 fvarS (Forall _ t) = fvar t
 
+shiftTBVar :: Int -> Type -> Type
+shiftTBVar d (TBVar i) = TBVar (i + d)
+shiftTBVar _ t = t
+
 apply :: Substitution -> Type -> Type
 apply s (TArr t1 t2) = TArr (apply s t1) (apply s t2)
 apply s (TVar i) = case IntMap.lookup i s of
@@ -42,7 +46,7 @@ applyBound env (TArr t1 t2) = TArr (applyBound env t1) (applyBound env t2)
 applyBound _ t = t
 
 applyS :: Substitution -> Scheme -> Scheme
-applyS s (Forall n t) = Forall n (apply s t)
+applyS s (Forall n t) = Forall n (apply (IntMap.map (shiftTBVar n) s) t)
 
 applyEnv :: Substitution -> Env -> Env
 applyEnv s = map (applyS s)
