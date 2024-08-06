@@ -1,5 +1,6 @@
 module MultLam.TypeCheck where
 
+import Control.Monad
 import Control.Monad.Except
 import Control.Monad.RWS.Strict
 import Data.IntMap.Strict (IntMap)
